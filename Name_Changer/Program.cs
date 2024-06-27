@@ -7,7 +7,7 @@ namespace Name_Changer
         public static void Main(string[] args)
         {
             // Change this variable to the path where the directory names you want  to be changed
-            string path = @"C:\Users\est-enzo.cassin\OneDrive - Tribunal de Justica de Sao Paulo\Área de Trabalho\portal\";
+            string path = @"/path";
             Console.WriteLine(path.Length);
             var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly);
 
