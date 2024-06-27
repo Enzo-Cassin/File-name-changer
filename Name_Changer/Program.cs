@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Channels;
+﻿using System.Globalization;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Name_Changer
 {
@@ -15,73 +16,36 @@ namespace Name_Changer
             {
                 string fileName = Path.GetFileNameWithoutExtension(file);
                 string extension = Path.GetExtension(file);
-                string newName = "";
-                for(int i = 0; i < fileName.Length; i++)
+
+                fileName = RemoveAccents(fileName);
+
+                fileName = Regex.Replace(fileName, @"\s+|[.,;_]", "-");
+                while (fileName.Contains("--"))
                 {
-                    if (fileName[i] == 'Á' || fileName[i] == 'À' || fileName[i] == 'Ã' || fileName[i] == 'Â')
-                    {
-                        newName += 'A';
-                    } 
-                    else if (fileName[i] == 'á' || fileName[i] == 'à' || fileName[i] == 'ã' || fileName[i] == 'â')
-                    {
-                        newName += 'a';
-                    } 
-                    else if (fileName[i] == 'É' || fileName[i] == 'È' || fileName[i] == 'Ê')
-                    {
-                        newName += 'E';
-                    }
-                    else if (fileName[i] == 'é' || fileName[i] == 'è' || fileName[i] == 'ê')
-                    {
-                        newName += 'e';
-                    }
-                    else if (fileName[i] == 'Í' || fileName[i] == 'Ì' || fileName[i] == 'Î')
-                    {
-                        newName += 'I';
-                    }
-                    else if (fileName[i] == 'í' || fileName[i] == 'ì' || fileName[i] == 'î')
-                    {
-                        newName += 'i';
-                    }
-                    else if (fileName[i] == 'Ó' || fileName[i] == 'Ò' || fileName[i] == 'Õ' || fileName[i] == 'Ô')
-                    {
-                        newName += 'O';
-                    }
-                    else if (fileName[i] == 'ó' || fileName[i] == 'ò' || fileName[i] == 'õ' || fileName[i] == 'ô')
-                    {
-                        newName += 'o';
-                    }
-                    else if (fileName[i] == 'Ú' || fileName[i] == 'Ù' || fileName[i] == 'Û')
-                    {
-                        newName += 'U';
-                    }
-                    else if (fileName[i] == 'ú' || fileName[i] == 'ù' || fileName[i] == 'û')
-                    {
-                        newName += 'u';
-                    }
-                    else if (fileName[i] == 'Ç')
-                    {
-                        newName += 'C';
-                    }
-                    else if (fileName[i] == 'ç')
-                    {
-                        newName += 'c';
-                    }
-                    else if (fileName[i] == ' ' || fileName[i] == '.' || fileName[i] == ',' || fileName[i] == ';' || fileName[i] == '_')
-                    {
-                        newName += '-';
-                    }
-                    else
-                    {
-                        newName += fileName[i];
-                    }
+                    fileName = Regex.Replace(fileName, @"--", "-");
                 }
-                newName += extension;
-                string newpath = path + newName;
                 
+                fileName += Path.GetExtension(file);
+                string newpath = path + fileName;
+
                 File.Move(file, newpath);
             }
             Console.WriteLine("All files names were changed.");
         }
-        
+
+        public static string RemoveAccents(string text)
+        {
+            StringBuilder sbReturn = new StringBuilder();
+            var arrayText = text.Normalize(NormalizationForm.FormD).ToCharArray();
+
+            foreach (char letter in arrayText)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(letter) != UnicodeCategory.NonSpacingMark)
+                    sbReturn.Append(letter);
+            }
+
+            return sbReturn.ToString();
+        }
+
     }
 }
