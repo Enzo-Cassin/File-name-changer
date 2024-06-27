@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Channels;
 
 namespace Name_Changer
 {
@@ -7,24 +8,25 @@ namespace Name_Changer
         public static void Main(string[] args)
         {
             // Change this variable to the path where the directory names you want  to be changed
-            string path = @"/path";
-            Console.WriteLine(path.Length);
+            string path = @"\path";
             var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly);
 
             foreach (string file in files)
             {
-                Console.WriteLine(file);
-                string fileName = file.Substring(path.Length);
+                string fileName = Path.GetFileNameWithoutExtension(file);
+                string extension = Path.GetExtension(file);
                 string newName = "";
-                for(int i = 0; i < fileName.Length-4; i++) // -4 for to ignore the extension name ( .jgp for example )
+                for(int i = 0; i < fileName.Length; i++)
                 {
                     if (fileName[i] == 'Á' || fileName[i] == 'À' || fileName[i] == 'Ã' || fileName[i] == 'Â')
                     {
                         newName += 'A';
-                    } else if (fileName[i] == 'á' || fileName[i] == 'à' || fileName[i] == 'ã' || fileName[i] == 'â')
+                    } 
+                    else if (fileName[i] == 'á' || fileName[i] == 'à' || fileName[i] == 'ã' || fileName[i] == 'â')
                     {
                         newName += 'a';
-                    } else if (fileName[i] == 'É' || fileName[i] == 'È' || fileName[i] == 'Ê')
+                    } 
+                    else if (fileName[i] == 'É' || fileName[i] == 'È' || fileName[i] == 'Ê')
                     {
                         newName += 'E';
                     }
@@ -64,7 +66,7 @@ namespace Name_Changer
                     {
                         newName += 'c';
                     }
-                    else if (fileName[i] == ' ' || fileName[i] == '.' || fileName[i] == ',' || fileName[i] == '_')
+                    else if (fileName[i] == ' ' || fileName[i] == '.' || fileName[i] == ',' || fileName[i] == ';' || fileName[i] == '_')
                     {
                         newName += '-';
                     }
@@ -73,16 +75,13 @@ namespace Name_Changer
                         newName += fileName[i];
                     }
                 }
-                for (int i = fileName.Length-4; i< fileName.Length; i++)
-                {
-                    newName += fileName[i];
-                }
-
-                string oldPath = path + fileName;
+                newName += extension;
                 string newpath = path + newName;
                 
-                File.Move(oldPath, newpath);
+                File.Move(file, newpath);
             }
+            Console.WriteLine("All files names were changed.");
         }
+        
     }
 }
