@@ -30,7 +30,7 @@ namespace Name_Changer
 
                 File.Move(file, newpath);
             }
-            Console.WriteLine("All files names were changed.");
+            Console.WriteLine("Todos os arquivos foram alterados.");
         }
 
         public static string RemoveAccents(string text)
