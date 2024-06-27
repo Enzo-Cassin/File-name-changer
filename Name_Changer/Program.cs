@@ -8,8 +8,8 @@ namespace Name_Changer
     {
         public static void Main(string[] args)
         {
-            // Change this variable to the path where the directory names you want  to be changed
-            string path = @"\path";
+            
+            string path = @"\path"; // Alterar a string para o caminho desejado
             var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly);
 
             foreach (string file in files)
