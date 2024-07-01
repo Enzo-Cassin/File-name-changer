@@ -26,7 +26,7 @@ namespace Name_Changer
                 }
                 
                 fileName += Path.GetExtension(file);
-                string newpath = path + fileName;
+                string newpath = path + @"\" + fileName;
 
                 File.Move(file, newpath);
             }
